@@ -7,4 +7,3 @@ export default function AddEventPage() {
     </Layout>
   )
 }
-© 2021 GitHub, Inc.

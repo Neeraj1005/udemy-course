@@ -1,6 +1,6 @@
 // import { parseCookies } from '@/helpers/index'
-// import { ToastContainer, toast } from 'react-toastify'
-// import 'react-toastify/dist/ReactToastify.css'
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import { useState } from "react";
 import { useRouter } from "next/router";
 import Link from "next/link";
@@ -21,21 +21,49 @@ export default function AddEventPage() {
 
   const router = useRouter();
 
-  const handleSubmit = (e) => {
-    e.preventDefault()
-    console.log(values)
-  }
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    // Validation
+    const hasEmptyFields = Object.values(values).some(
+      (element) => element === ""
+    );
+
+    if (hasEmptyFields) {
+      toast.error("Please fill in all fields");
+    }
+
+    const res = await fetch(`${API_URL}/events`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        // Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify(values),
+    });
+
+    if (!res.ok) {
+      // if (res.status === 403 || res.status === 401) {
+      //   toast.error("No token included");
+      //   return;
+      // }
+      toast.error("Something Went Wrong");
+    } else {
+      const evt = await res.json();
+      router.push(`/events/${evt.slug}`);
+    }
+  };
 
   const handleInputChange = (e) => {
-    const { name, value} = e.target // destructuring
-    setValues({...values, [name]: value}) // add values in object
-  }
+    const { name, value } = e.target; // destructuring
+    setValues({ ...values, [name]: value }); // add values in object
+  };
 
   return (
     <Layout title="Add New Event">
       <Link href="/events">Go Back</Link>
       <h1>Add Event</h1>
-      {/* <ToastContainer /> */}
+      <ToastContainer />
       <form onSubmit={handleSubmit} className={styles.form}>
         <div className={styles.grid}>
           <div>

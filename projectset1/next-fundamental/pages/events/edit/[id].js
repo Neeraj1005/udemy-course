@@ -8,6 +8,7 @@ import { useRouter } from "next/router";
 import Link from "next/link";
 import Image from "next/image";
 import Modal from "@/components/Modal";
+import ImageUpload from "@/components/ImageUpload";
 import Layout from "@/components/Layout";
 import { API_URL } from "@/config/index";
 import styles from "@/styles/Form.module.css";
@@ -23,11 +24,11 @@ export default function EditEventPage({ evt }) {
     description: evt.description,
   });
 
-    const [imagePreview, setImagePreview] = useState(
-      evt.image ? evt.image[0].formats.thumbnail.url : null
-    )
+  const [imagePreview, setImagePreview] = useState(
+    evt.image.length > 0 ? evt.image[0].formats.thumbnail.url : null
+  );
 
-  const [showModal, setShowModal] = useState(false)
+  const [showModal, setShowModal] = useState(false);
 
   const router = useRouter();
 
@@ -67,6 +68,13 @@ export default function EditEventPage({ evt }) {
   const handleInputChange = (e) => {
     const { name, value } = e.target; // destructuring
     setValues({ ...values, [name]: value }); // add values in object
+  };
+
+  const imageUploaded = async (e) => {
+    const res = await fetch(`${API_URL}/events/${evt.id}`);
+    const data = await res.json();
+    setImagePreview(data.image[0].formats.thumbnail.url);
+    setShowModal(false);
   };
 
   return (
@@ -171,12 +179,11 @@ export default function EditEventPage({ evt }) {
       </div>
 
       <Modal show={showModal} onClose={() => setShowModal(false)}>
-        Image Upload
-        {/* <ImageUpload
+        <ImageUpload
           evtId={evt.id}
           imageUploaded={imageUploaded}
-          token={token}
-        /> */}
+          // token={token}
+        />
       </Modal>
     </Layout>
   );

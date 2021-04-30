@@ -23,9 +23,9 @@ export default function EditEventPage({ evt }) {
     description: evt.description,
   });
 
-  //   const [imagePreview, setImagePreview] = useState(
-  //     evt.image ? evt.image.formats.thumbnail.url : null
-  //   )
+    const [imagePreview, setImagePreview] = useState(
+      evt.image ? evt.image[0].formats.thumbnail.url : null
+    )
 
   const [showModal, setShowModal] = useState(false)
 
@@ -153,13 +153,13 @@ export default function EditEventPage({ evt }) {
       </form>
 
       <h2>Event Image</h2>
-      {/* {imagePreview ? (
+      {imagePreview ? (
         <Image src={imagePreview} height={100} width={170} />
       ) : (
         <div>
           <p>No image uploaded</p>
         </div>
-      )} */}
+      )}
 
       <div>
         <button

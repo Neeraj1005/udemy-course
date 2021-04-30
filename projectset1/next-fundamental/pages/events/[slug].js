@@ -46,15 +46,15 @@ export default function EventPage({ evt }) {
         </span>
         <h1>{evt.name}</h1>
         <ToastContainer />
-        {/* {evt.image && (
+        {evt.image && (
           <div className={styles.image}>
             <Image
-              src={evt.image.formats.medium.url}
+              src={evt.image[0].formats.medium.url}
               width={960}
               height={600}
             />
           </div>
-        )} */}
+        )}
 
         <h3>Performers:</h3>
         <p>{evt.performers}</p>
